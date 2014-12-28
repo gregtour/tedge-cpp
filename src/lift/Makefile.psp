@@ -1,0 +1,64 @@
+# Lift PSP Makefile
+
+OUTPUT_DIR = ../../bin/lift
+BINARY_TARGET = ../../bin/psp/lift
+TARGET = $(BINARY_TARGET)
+
+GAME_SRC = 	main.o \
+		entity/cameraController.o entity/character.o \
+		entity/item.o entity/level.o \
+		entity/player.o \
+		game/game.o game/gameInput.o \
+		game/options.o
+
+ENGINE_SRC =	../engine/engine.o ../engine/update.o \
+		../engine/common/log.o \
+		../engine/common/resource.o ../engine/common/timer.o \
+		../engine/entity/camera.o ../engine/entity/entity.o \
+		../engine/entity/graphicalObj.o ../engine/entity/inputtingObj.o \
+		../engine/entity/loggableObj.o ../engine/entity/physicalObj.o \
+		../engine/graphics/font.o ../engine/graphics/graphics.o \
+		../engine/graphics/lighting.o ../engine/graphics/particle.o \
+		../engine/graphics/texture.o \
+		../engine/graphics/buffer/IGLIndxBuf.o ../engine/graphics/buffer/IGLVertBuf.o \
+		../engine/input/input.o ../engine/input/inputData.o \
+		../engine/physics/collision.o ../engine/physics/common.o \
+		../engine/physics/matrix.o ../engine/physics/svector.o \
+		../engine/physics/object.o ../engine/physics/physics.o \
+		../engine/sound/music.o ../engine/sound/sound.o \
+		../engine/sound/wavesound.o \
+		../engine/graphics/clipping/clipping.o ../engine/graphics/clipping/math.o
+# ../engine/graphics/vertBuf.o 
+
+OBJS = $(GAME_SRC) $(ENGINE_SRC)
+#INCDIR = ./entity ./game ../engine ../engine/common ../engine/entity ../engine/graphics ../engine/input ../engine/physics ../engine/sound
+INCDIR = 
+
+# -O2 -G0 no ansi
+CFLAGS = -g -Wall -Wno-unused-value -ansi -D _PSP -D _OPEN_GL
+CXXFLAGS = $(CFLAGS) -fno-exceptions
+ASFLAGS = $(CFLAGS)
+
+# -fno-rtti
+
+EXTRA_TARGETS = EBOOT.PBP
+PSP_EBOOT_TITLE = lift alpha
+
+LIBS = -lSDL_image -ljpeg -lpng -lz -lm -lpspgum -lpspgu -lpsprtc -lGL -lGLU -lSDL_mixer -lstdc++ -lpsppower
+
+#LIBS = 		-lGL -lGLU -lSDL -lSDL_mixer
+#OPTIONS = 	$(LIBS) `sdl-config --cflags --libs`
+
+PSPSDK=$(shell psp-config --pspsdk-path)
+
+PSPBIN = $(PSPSDK)/../bin
+
+CFLAGS += $(shell $(PSPBIN)/sdl-config --cflags)
+CXXFLAGS += $(shell $(PSPBIN)/sdl-config --cflags) 
+LIBS += $(shell $(PSPBIN)/sdl-config --libs)
+
+include $(PSPSDK)/lib/build.mak
+
+all:
+	cp EBOOT.PBP $(OUTPUT_DIR)/EBOOT.PBP
+	rm -f EBOOT.PBP

@@ -1,0 +1,84 @@
+[0]:	Log Created
+[4260256]:	Starting Up
+[1]:	LoadBMP failed on file marble.bmp
+[1]:	Starting Game
+[1]:	LoadBMP failed on file thin.png
+[1]:	LoadWAV failed on file laser.wav
+[1]:	LoadWAV failed on file laser.wav
+[1]:	LoadWAV failed on file hit.wav
+[1]:	LoadWAV failed on file hit.wav
+[1]:	LoadWAV failed on file explosion.wav
+[1]:	LoadWAV failed on file explosion.wav
+[1]:	LoadBMP failed on file middle.png
+[1]:	LoadWAV failed on file laser.wav
+[1]:	LoadWAV failed on file hit.wav
+[1]:	LoadWAV failed on file explosion.wav
+[1]:	LoadWAV failed on file laser.wav
+[1]:	LoadWAV failed on file hit.wav
+[1]:	LoadWAV failed on file explosion.wav
+[1]:	LoadWAV failed on file laser.wav
+[1]:	LoadWAV failed on file hit.wav
+[1]:	LoadWAV failed on file explosion.wav
+[1]:	LoadWAV failed on file laser.wav
+[1]:	LoadWAV failed on file hit.wav
+[1]:	LoadWAV failed on file explosion.wav
+[1]:	LoadWAV failed on file laser.wav
+[1]:	LoadWAV failed on file hit.wav
+[1]:	LoadWAV failed on file explosion.wav
+[1]:	LoadWAV failed on file laser.wav
+[1]:	LoadWAV failed on file hit.wav
+[1]:	LoadWAV failed on file explosion.wav
+[1]:	LoadWAV failed on file laser.wav
+[1]:	LoadWAV failed on file hit.wav
+[1]:	LoadWAV failed on file explosion.wav
+[1]:	LoadWAV failed on file laser.wav
+[1]:	LoadWAV failed on file hit.wav
+[1]:	LoadWAV failed on file explosion.wav
+[1]:	LoadWAV failed on file laser.wav
+[1]:	LoadWAV failed on file hit.wav
+[1]:	LoadWAV failed on file explosion.wav
+[1]:	LoadWAV failed on file laser.wav
+[1]:	LoadWAV failed on file hit.wav
+[1]:	LoadWAV failed on file explosion.wav
+[1]:	LoadWAV failed on file laser.wav
+[1]:	LoadWAV failed on file hit.wav
+[1]:	LoadWAV failed on file explosion.wav
+[1]:	LoadWAV failed on file laser.wav
+[1]:	LoadWAV failed on file hit.wav
+[1]:	LoadWAV failed on file explosion.wav
+[1]:	LoadWAV failed on file laser.wav
+[1]:	LoadWAV failed on file hit.wav
+[1]:	LoadWAV failed on file explosion.wav
+[1]:	LoadWAV failed on file laser.wav
+[1]:	LoadWAV failed on file hit.wav
+[1]:	LoadWAV failed on file explosion.wav
+[1]:	LoadWAV failed on file laser.wav
+[1]:	LoadWAV failed on file hit.wav
+[1]:	LoadWAV failed on file explosion.wav
+[1]:	LoadBMP failed on file health.png
+[1]:	LoadWAV failed on file pickup.wav
+[1]:	LoadWAV failed on file pickup.wav
+[1]:	LoadWAV failed on file pickup.wav
+[1]:	LoadWAV failed on file pickup.wav
+[1]:	LoadWAV failed on file pickup.wav
+[1]:	LoadWAV failed on file pickup.wav
+[1]:	LoadWAV failed on file pickup.wav
+[1]:	LoadWAV failed on file pickup.wav
+[1]:	LoadWAV failed on file pickup.wav
+[1]:	LoadWAV failed on file pickup.wav
+[1]:	LoadWAV failed on file pickup.wav
+[1]:	Entering Main Loop
+[1]:	LoadBMP failed on file thick.png
+[124]:	Shutting Down
+[124]:	Warning: Resource marble.bmp unloaded with 1 remaing reference(s).
+[124]:	Warning: Resource thin.png unloaded with 1 remaing reference(s).
+[124]:	Warning: Resource tank.ms3d unloaded with 16 remaing reference(s).
+[124]:	Warning: Resource laser.wav unloaded with 16 remaing reference(s).
+[124]:	Warning: Resource hit.wav unloaded with 16 remaing reference(s).
+[124]:	Warning: Resource explosion.wav unloaded with 16 remaing reference(s).
+[124]:	Warning: Resource middle.png unloaded with 16 remaing reference(s).
+[124]:	Warning: Resource health.png unloaded with 10 remaing reference(s).
+[124]:	Warning: Resource health.ms3d unloaded with 10 remaing reference(s).
+[124]:	Warning: Resource pickup.wav unloaded with 10 remaing reference(s).
+[124]:	Warning: Resource bullet.ms3d unloaded with 3254 remaing reference(s).
+[124]:	Warning: Resource thick.png unloaded with 6019 remaing reference(s).

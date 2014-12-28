@@ -1,0 +1,11 @@
+[0]:	Log Created
+[0]:	Starting Up
+[0]:	LoadBMP failed on file lolsupsam.hax
+[0]:	Starting Game
+[0]:	LoadBMP failed on file brick.bmp
+[0]:	ms3d open
+[0]:	Entering Main Loop
+[2]:	Shutting Down
+[2]:	<3 HAL
+[2]:	Warning: Resource lolsupsam.hax unloaded with 1 remaing reference(s).
+[2]:	Warning: Resource brick.bmp unloaded with 1 remaing reference(s).

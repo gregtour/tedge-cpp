@@ -1,0 +1,141 @@
+/********************
+ * TANK 
+ *   Or how I learned to stop worrying and love the tedge
+ *     June 13th 2009
+ *       Greg Tourville
+ *         Team Duck
+ ********************/
+
+#include "SDL.h"
+#include "../engine/engine.h"
+#include "../engine/update.h"
+#include "../engine/graphics/graphics.h"
+#include "entity/player.h"
+#include "entity/enemy.h"
+#include "entity/level.h"
+#include "entity/cameraController.h"
+#include "game/game.h"
+
+
+const char* gameTitle = "TANKS! IN 3D!!";
+
+
+#ifdef _PSP
+extern "C" int SDL_main( int argc, char *argv[] )
+#else
+int main( int argc, char *argv[] )
+#endif
+{
+	gLog.SetLogging( true );
+
+	Game();
+
+	gLog.SaveLog( "gamelog.log" );
+	gLog.ClearLog();
+
+	return 0;
+}
+
+
+
+
+int GamePrecache()
+{
+	return 1;
+}
+
+
+
+void GameUnload()
+{
+}
+
+
+
+void GameStart()
+{
+	// Start up the game
+	// this will eventually launch a menu
+	// for now create the world, throw in the player, and throw in some bots
+	gWorld = new CPhysics();
+	gWorld->SetCollisionFunction(&GameCollisionFunction);
+	SBoundingBox bounds;
+	bounds.min = SVector3(0.0f, 0.0f, 0.0f);
+	bounds.max = SVector3(100.0f, 20.0f, 100.0f);
+	gWorld->SetBoundries(bounds);
+
+	gEntities.Add(new CLevel());
+
+	SVector3 gravity(0.0f, -15.0f, 0.0f);
+	
+	SSphere tanksphere;
+	tanksphere.position = SVector3(0.0f, 1.5f, 0.0f);
+	tanksphere.radius = 1.5f;
+
+	SBoundingBox tankbox;
+	tankbox.max = SVector3(1.5f, 2.0f, 1.5f);
+	tankbox.min = SVector3(-1.5f, 0.0f, -1.5f);
+
+	CTank*	player;
+	player = new CPlayer();
+	player->CreatePhysical(gWorld);
+	CPObject* obj = player->GetPhysicalObject();
+<<<<<<< .mine
+	obj->SetPosition(SVector3(50.0f, 0.0f, 50.0f));
+=======
+	obj->SetObjectType(TANK_OBJECT_TYPE);
+	obj->SetPosition(SVector3(25.0f, 5.0f, 25.0f));
+>>>>>>> .r11
+	obj->SetDefaultForce(gravity);
+	obj->SetFriction(5.0f);
+	obj->SetBoundingBox(tankbox);
+	obj->SetSphere(tanksphere);
+	obj->SetCollisionMask(1);
+	gEntities.Add(player);
+
+	for (int i = 0; i < 10; i++)
+	{
+		CEnemy*	enemy;
+		enemy = new CEnemy();
+		enemy->CreatePhysical(gWorld);
+		obj = enemy->GetPhysicalObject();
+		obj->SetPosition(SVector3(rand()%100, 10.0f, rand()%100));
+		obj->SetDefaultForce(gravity);
+		obj->SetFriction(5.0f);
+		obj->SetBoundingBox(tankbox);
+		obj->SetSphere(tanksphere);
+		obj->SetCollisionMask(1);
+		gEntities.Add(enemy);
+	}
+
+
+	CCamera* cam = new CCamera();
+	BindCamera(cam);
+
+	CCameraController* camControl = new CCameraController();
+	camControl->SetViewAngle(0.35f);
+	camControl->SetViewDistance(10.0f);
+	camControl->ControlCamera(cam);
+	camControl->FocusOnObject(player);
+	gEntities.Add(camControl);
+	
+}
+
+
+
+
+void GameStateChange( int from, int to )
+{
+	// If the game had states, they'd probably look something like this:
+/*	switch ( to )
+	{
+	case NEXT_LEVEL_STATE:
+		NextLevel();
+		ChangeGameState( DEFAULT_STATE );
+		break;
+	default:
+		EndGame();
+	}
+*/
+}
+

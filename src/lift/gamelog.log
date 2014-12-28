@@ -1,0 +1,11 @@
+[0]:	Log Created
+[0]:	Starting Up
+[0]:	Starting Game
+[0]:	LoadBMP failed on file metal.bmp
+[0]:	LoadBMP failed on file metal.bmp
+[0]:	Entering Main Loop
+[1]:	LoadBMP failed on file test2.bmp
+[1]:	LoadBMP failed on file test2.bmp
+[1]:	Shutting Down
+[2]:	Warning: Resource metal.bmp unloaded with 1 remaing reference(s).
+[2]:	Warning: Resource test2.bmp unloaded with 1 remaing reference(s).

@@ -1,0 +1,148 @@
+// tank.cpp for CTank entity
+
+#include "../main.h"
+#include "../../engine/graphics/model.h"
+#include "../../engine/graphics/texture.h"
+#include "../../engine/sound/wavesound.h"
+#include "../game/game.h"
+#include "tank.h"
+#include "bullet.h"
+#include <string>
+#include <sstream>
+<<<<<<< .mine
+#include <cmath>
+=======
+#include <math.h>
+>>>>>>> .r11
+
+const int TANK_MAX_HEALTH = 5;
+const char* TANK_MODEL_FILE		= "tank.ms3d";
+const char* TANK_TEXTURE_FILE	= "enemy.png";
+const char* TANK_SHOOT_SOUND	= "laser.wav";
+
+CTank::CTank()
+{
+	mHealth = TANK_MAX_HEALTH;
+	mModel = CManagedModel::Load( &gResourceManager, TANK_MODEL_FILE );
+	mShootSound = CManagedWaveSound::Load(&gResourceManager, TANK_SHOOT_SOUND);
+	//mTexture = CManagedTexture::Load(&gResourceManager, TANK_TEXTURE_FILE);
+	mLastShoot.Clear();
+}
+
+CTank::~CTank()
+{
+}
+
+void CTank::Shoot()
+{
+	//SVector3 gravity(0.0f, -15.0f, 0.0f);
+	SVector3 pos(mObject->GetPosition());
+	pos.x += cos(mRot+PI) * 3.0f;
+	pos.z += sin(mRot+PI) * 3.0f;
+
+	SVector3 force(cos(mRot+PI) * BULLET_SPEED, 0, sin(mRot+PI) * BULLET_SPEED);
+
+	SSphere bulletsphere;
+	bulletsphere.position = SVector3(0.0f, .25f, 0.0f);
+	bulletsphere.radius = .25f;
+
+	SBoundingBox bulletbox;
+	bulletbox.max = SVector3(-.27f, .04f, .06f);
+	bulletbox.min = SVector3(-.25f, -.05f, -.06f);
+
+	CBullet* bullet;
+	bullet = new CBullet();
+	bullet->CreatePhysical(gWorld);
+	bullet->SetRot(mRot);
+	CPObject* obj = bullet->GetPhysicalObject();
+	obj->SetObjectType(BULLET_OBJECT_TYPE);
+	obj->SetPosition(pos);
+	//obj->SetDefaultForce(gravity);
+	obj->SetVelocity(force);
+	//obj->SetFriction(5.0f);
+	obj->SetBoundingBox(bulletbox);
+	obj->SetSphere(bulletsphere);
+	obj->SetCollisionMask(1);
+	gEntities.Add(bullet);
+}
+
+void CTank::Render()
+{
+	if (mObject)
+	{
+		SVector3 pos = mObject->GetPosition();
+		{
+			float x, y, z;
+			gCamera->GetPosition( &x, &y, &z );
+			if ( (x-pos.x)*(x-pos.x) + (y-pos.y)*(y-pos.y) + (z-pos.z)*(z-pos.z) > VIEW_DISTANCE_SQUARED )
+				return;
+		}
+
+		glTranslatef( pos.x, pos.y, pos.z );
+		glRotatef(mRot * DEGREES, 0.0f, -1.0f, 0.0f );
+
+		//glEnable(GL_BLEND);
+		//glBlendFunc(GL_ONE, GL_ONE);
+		//glDisable(GL_CULL_FACE);
+		//glDepthMask(GL_FALSE);
+
+		mTexture->Bind();
+		mModel->Render();
+		mTexture->Unbind();
+
+		glDisable(GL_BLEND);
+	}
+}
+
+void CTank::Update(float dt)
+{
+	if (!mObject && mRespawnTime.Time() > TANK_RESPAWN_TIME)
+		Spawn();
+	else if (mHealth <= 0)
+	{
+//		gEntities.Add()
+		mRespawnTime.Step();
+	}
+}
+
+void CTank::Spawn()
+{
+
+}
+
+void CTank::Shoot()
+{
+
+
+}
+<<<<<<< .mine
+
+void CTank::TurnLeft(float dt)
+{
+	mRot -= TANK_ROT_SPEED * dt;
+}
+
+void CTank::TurnRight(float dt)
+{
+	mRot += TANK_ROT_SPEED * dt;
+}
+
+void CTank::MoveForward(float dt)
+{
+	SVector3 force;
+	force.x = -cos(mRot) * TANK_SPEED * dt;
+	force.z = -sin(mRot) * TANK_SPEED * dt;
+	mObject->ApplyForce(force);
+}
+
+void CTank::MoveBackward(float dt)
+{
+	MoveForward(dt * -0.7f);
+}
+=======
+
+void CTank::Hit()
+{
+
+}
+>>>>>>> .r11
