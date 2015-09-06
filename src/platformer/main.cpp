@@ -70,8 +70,9 @@ void NextLevel()
 	}
 
 	// delete physics & create a new one
-	if (gWorld)
+	if (gWorld) {
 		delete gWorld;
+	}
 	
 	gWorld = new CPhysics();
 	gWorld->SetCollisionFunction(&GameCollisionFunction);

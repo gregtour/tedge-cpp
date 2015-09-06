@@ -23,6 +23,7 @@ void CWaveSound::Load( std::string file )
 {
 	if ( !mLoaded )
 	{
+#ifndef NO_SOUND
 		mWave = Mix_LoadWAV( file.c_str() );
 		if ( mWave )
 			mLoaded = true;
@@ -32,6 +33,9 @@ void CWaveSound::Load( std::string file )
 			std::string message = "LoadWAV failed on file " + file;
 			gLog.LogItem( new CLogMessage(message) );
 		}
+#else
+			mLoaded = true;
+#endif
 	}
 }
 
@@ -40,7 +44,9 @@ void CWaveSound::Unload()
 {
 	if ( mLoaded )
 	{
+#ifndef NO_SOUND
 		Mix_FreeChunk( mWave );
+#endif
 		mLoaded = false;
 	}
 }
@@ -49,6 +55,7 @@ void CWaveSound::Unload()
 	-1 means failure				*/
 int CWaveSound::Play( int loops )
 {
+#ifndef NO_SOUND
 	if ( mLoaded )
 	{
 		int channel = Mix_PlayChannel( -1, mWave, loops );
@@ -56,6 +63,9 @@ int CWaveSound::Play( int loops )
 		return channel;
 	}
 	return -1;
+#else
+	return 0;
+#endif
 }
 
 #define MIN_VOLUME	10
@@ -63,6 +73,7 @@ int CWaveSound::Play( int loops )
 
 int CWaveSound::Play( int loops, SVector3 pos )
 {
+#ifndef NO_SOUND
 	if ( mLoaded )
 	{
 		SVector3 dist = gCamera->GetPosition() - pos;
@@ -88,6 +99,9 @@ int CWaveSound::Play( int loops, SVector3 pos )
 		}
 	}
 	return -1;
+#else
+	return 0;
+#endif
 }
 
 bool CWaveSound::IsLoaded()

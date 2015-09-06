@@ -1,6 +1,6 @@
 # Chronicles Computer Makefile
 
-BINARY_TARGET = ../../bin/chronicles/chronicles
+BINARY_TARGET = ../../bin/chronicles/chronicles.bin
 INCLUDES = -I /usr/include/SDL/
 
 #GAME_SRC =	main.cpp
@@ -35,16 +35,34 @@ ENGINE_SRC =	../engine/engine.cpp ../engine/update.cpp \
 		../engine/sound/music.cpp ../engine/sound/sound.cpp \
 		../engine/sound/wavesound.cpp
 
-MAKE_OPTIONS =	-Wall -Wno-unused-value -ansi -D _OPEN_GL -D _DEBUG
+####
+SOURCES = $(GAME_SRC) $(ENGINE_SRC)
+OBJECTS = $(SOURCES:.cpp=.o)
+####
 
-LIBS = 		-lGL -lGLU -lSDL -lSDL_mixer -lSDL_image
+MAKE_OPTIONS =	-O2 -D _OPEN_GL -D NO_SOUND
+# -Wall -Wno-unused-value -ansi 
+# -D _DEBUG
 
-OPTIONS = 	$(LIBS) `sdl-config --cflags --libs` -g
+LIBS = 		-lGL -lGLU -lSDL -lSDL_image
+# -lSDL_mixer
+OPTIONS = 	$(LIBS) `sdl-config --cflags --libs`
 
-all:
-	g++ $(MAKE_OPTIONS) $(INCLUDES) $(GAME_SRC) $(ENGINE_SRC) -o $(BINARY_TARGET) $(OPTIONS)
+#all:
+#	g++ $(MAKE_OPTIONS) $(INCLUDES) $(GAME_SRC) $(ENGINE_SRC) -o $(BINARY_TARGET) $(OPTIONS)
+all: $(SOURCES) $(BINARY_TARGET)
 
+$(BINARY_TARGET): $(OBJECTS)
+	g++ $(MAKE_OPTIONS) $(INCLUDES) -o $@ $^ $(OPTIONS)
+
+.cpp.o:
+	g++ $(MAKE_OPTIONS) $(INCLUDES) -c -o $@ $<
+
+clean2: 
+	@echo Cleaning...
+	rm $(OBJECTS)
 clean:
 	@echo Cleaning up...
 	rm -rf $(BINARY_TARGET)
+	rm $(OBJECTS)
 	@echo Done.

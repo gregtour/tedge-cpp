@@ -34,7 +34,15 @@
 //#define VIEW_DISTANCE			100.0f
 //#define VIEW_DISTANCE_SQUARED	(100.0f*100.0f)
 
-#if 1
+
+//#define _IMMEDIATE_MODE
+
+//#define VBO
+//#define USE_GL_EXT
+
+//#define INDICES
+
+#ifdef VBO
 
 #include <GL/glext.h>
 
@@ -54,9 +62,7 @@ extern bool gGLSupportsVBO;
 
 #endif
 
-//#define _IMMEDIATE_MODE
-#define VBO
-//#define INDICES
+
 
 
 
@@ -99,14 +105,16 @@ extern bool gGLSupportsVBO;
 //#define SCR_WIDTH 1920
 //#define SCR_HEIGHT 1080 
 
-//#define SCR_WIDTH 800
-//#define SCR_HEIGHT 600
+
+// RESOLUTION //
+#define SCR_WIDTH 600
+#define SCR_HEIGHT 400
 
 //#define SCR_WIDTH 1024
 //#define SCR_HEIGHT 768
 
-#define SCR_WIDTH 1280
-#define SCR_HEIGHT 1024
+//#define SCR_WIDTH 1280
+//#define SCR_HEIGHT 1024
 
 //#define SCR_WIDTH	480
 //#define SCR_HEIGHT	272

@@ -3,6 +3,7 @@
 #include "../../engine/graphics/texture.h"
 #include "../../engine/graphics/model.h"
 #include <cmath>
+#include <iostream>
 
 CPlayer::CPlayer()
 {
@@ -58,6 +59,7 @@ void CPlayer::Update( float dt )
 		// Digital Input
 		if ( mInputState->IsKeyPressed(K_UP) )
 		{
+//std::cout << "Move forward.";
 			MoveForward(dt*1.0f);
 		}
 
@@ -78,6 +80,7 @@ void CPlayer::Update( float dt )
 
 		if (mInputState->IsKeyHit(K_JUMP) && !mHasJumped)
 		{
+//std::cout << "Jump.";
 			Jump();
 		}
 	}
@@ -159,3 +162,4 @@ void CPlayer::ResetPosition()
 	mObject->SetPosition(mSafePos);
 	mObject->SetVelocity(SVector3(0.0f, 0.0f, 0.0f));
 }
+

@@ -41,6 +41,7 @@ void CMusic::Load( std::string file )
 	mLoaded = true;
 */
 #else
+#ifndef NO_SOUND
 		mMusic = Mix_LoadMUS( file.c_str() );
 		if ( mMusic )
 			mLoaded = true;
@@ -50,6 +51,9 @@ void CMusic::Load( std::string file )
 			std::string message = "LoadMUS failed on file " + file;
 			gLog.LogItem( new CLogMessage(message) );
 		}
+#else
+		mLoaded = true;
+#endif
 #endif
 	}
 }
@@ -60,7 +64,9 @@ void CMusic::Unload()
 	if ( mLoaded )
 	{
 #ifndef _PSP
+#ifndef NO_SOUND
 		Mix_FreeMusic( mMusic );
+#endif
 #endif
 		mLoaded = false;
 	}
@@ -76,7 +82,9 @@ void CMusic::Play( int loops )
 #ifdef _PSP
 //		MP3ME_Play( );
 #else
+#ifndef NO_SOUND
 		Mix_PlayMusic( mMusic, loops );
+#endif
 #endif
 	}
 #endif

@@ -5,9 +5,9 @@
 #include "../common/timer.h"
 #include "SDL.h"
 
-#define	NON_KEY		-1
-#define KB_KEY		0
-#define JOY_KEY		1
+#define	NON_KEY		0
+#define KB_KEY		1
+#define JOY_KEY		2
 
 #define	MAX_MAPPINGS	20
 #define MAX_KEYS	10

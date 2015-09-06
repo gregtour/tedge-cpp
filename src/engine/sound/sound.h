@@ -2,7 +2,9 @@
 #define _SOUND_H
 
 #include "SDL.h"
+#ifndef NO_SOUND
 #include "SDL_mixer.h"
+#endif
 #include "../common/resource.h"
 #include <string>
 

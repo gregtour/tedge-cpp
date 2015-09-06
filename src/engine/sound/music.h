@@ -20,7 +20,9 @@ public:
 	
 private:
 	bool mLoaded;
+#ifndef NO_SOUND
 	Mix_Music* mMusic;
+#endif
 };
 
 #endif

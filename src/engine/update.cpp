@@ -2,11 +2,11 @@
 #include "update.h"
 #include "entity/entity.h"
 #include "physics/collision.h"
-#include "common/profile.h"
+//#include "common/profile.h"
 
 int GameUpdate( float dt )
 {
-    ProfileStartClock(P_UPDATE);
+//    ProfileStartClock(P_UPDATE);
 
 	/*	Update Entities	*/
 	CListEntry<CEntity>* entity = gEntities.GetFirst();
@@ -26,7 +26,7 @@ int GameUpdate( float dt )
 		}
 	}
 
-    ProfileStopClock(P_UPDATE);
+//    ProfileStopClock(P_UPDATE);
 	return 1;
 }
 

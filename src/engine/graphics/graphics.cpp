@@ -10,7 +10,8 @@
 #include <cstring>
 #include "texture.h"
 #include "buffer/I3dVertBuf.h"
-#include "../common/profile.h"
+//#include "../common/profile.h"
+#include <iostream>
 
 #ifdef _PSP
 #include "clipping/clipping.h"
@@ -24,6 +25,8 @@ CTexture*		gSky;
 CLinkedList<IGraphicalObj>	gGraphicalObjList;
 CLinkedList<CLight>			gLights;
 
+
+#ifdef USE_GL_EXT
 #include <GL/glext.h>
 
 
@@ -86,7 +89,6 @@ int gltIsExtSupported(const char *extension)
 	}
 
 
-
 #ifdef _WIN32
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -136,12 +138,12 @@ int gltIsWGLExtSupported(HDC hDC, const char *szExtension)
   #endif
 
 
-
+#endif
 
 bool gGLSupportsVBO = false;
 
 //#define _IMMEDIATE_MODE
-#define VBO
+//#define VBO
 //#define INDICES
 
 
@@ -150,6 +152,8 @@ void BindCamera( CCamera* c )
 	gCamera = c;
 }
 
+
+#ifdef USE_GL_EXT
 void LoadExtensions()
 {
 	// extensions
@@ -217,6 +221,7 @@ void LoadExtensions()
 	}
 #endif
 }
+#endif
 
 int shadowSize = 1024;
 GLuint shadowTextureID;
@@ -237,8 +242,8 @@ int GraphicsStartup()
 
 	glFrontFace( GL_CCW );
 
-//	glEnable( GL_CULL_FACE );
-	glDisable( GL_CULL_FACE );
+	glEnable( GL_CULL_FACE );
+//	glDisable( GL_CULL_FACE );
 
 	glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
 	glClearDepth( 1.0f );
@@ -261,13 +266,17 @@ int GraphicsStartup()
 	glLoadIdentity();
 
 //	SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 0);
-
+#ifdef USE_GL_EXT
 	LoadExtensions();
-
+#endif
+#ifdef USING_SKYBOX
 	gSky = CManagedTexture::Load( &gResourceManager, "sky.jpg"  );
+#endif
 
+#ifdef WITH_SHADOWS
     glGenTextures(1, &shadowTextureID);
     glBindTexture(GL_TEXTURE_2D, shadowTextureID);
+#endif
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
@@ -278,6 +287,7 @@ int GraphicsStartup()
     glTexGeni(GL_R, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
     glTexGeni(GL_Q, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
 
+	std::cout << "Vertex Buffer Objects " << (gGLSupportsVBO ? "Supported" : "Not Supported") << std::endl;
 	return 1;
 }
 
@@ -399,17 +409,15 @@ int GameRender()
     GLfloat ambientLight_bright[4] = {0.9f, 0.9f, 0.9f, 1.0f};
     GLfloat diffuseLight_bright[4] = {0.8f, 0.8f, 0.8f, 1.0f};
 
-    ProfileStartClock(P_RENDER);
-
-    glEnable(GL_CULL_FACE);
-	glFrontFace( GL_CW );
+//    glEnable(GL_CULL_FACE);
+//	glFrontFace( GL_CW );
 
 	/*		Reset for new Rendering Pass	*/
-	glMatrixMode( GL_PROJECTION );
+/*	glMatrixMode( GL_PROJECTION );
 	glLoadIdentity();
 	gluPerspective( 55.0f , SCR_WIDTH/(GLfloat)SCR_HEIGHT , 1.0f , VIEW_DISTANCE );
     //glOrtho(-100.0f, 100.0f, -100.0f, 100.0f, 0.0f, 400.0f);
-
+*/
 	glMatrixMode( GL_MODELVIEW );
 	//glClear( GL_DEPTH_BUFFER_BIT );
 	glLoadIdentity();
@@ -421,6 +429,7 @@ int GameRender()
 		gCamera->Render();
 	}
     
+#if USING_SKYBOX
     // dry skybox
 	glPushMatrix();
 	SVector3 pos;
@@ -434,8 +443,10 @@ int GameRender()
 
     glEnable(GL_COLOR_MATERIAL);
     glEnable(GL_NORMALIZE);
-
+#endif
+#ifdef WITH_SHADOWS
 	glClear( GL_DEPTH_BUFFER_BIT );
+
 
    // generate shadow map
     float lightToSceneDistance;
@@ -575,9 +586,10 @@ int GameRender()
     glTexGenfv(GL_T, GL_EYE_PLANE, tPlane);
     glTexGenfv(GL_R, GL_EYE_PLANE, rPlane);
     glTexGenfv(GL_Q, GL_EYE_PLANE, qPlane);
+#endif
 
     // draw lit scene
-
+/*
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 	gluPerspective( 55.0f , SCR_WIDTH/(GLfloat)SCR_HEIGHT , 1.0f , VIEW_DISTANCE );
@@ -586,13 +598,14 @@ int GameRender()
     glLoadIdentity();
 
     if (gCamera) gCamera->Render();
-
-    glLightfv(GL_LIGHT3, GL_POSITION, lightPos);
+*/
+/*  glLightfv(GL_LIGHT3, GL_POSITION, lightPos);
     glLightfv(GL_LIGHT3, GL_AMBIENT, ambientLight_bright);
     glLightfv(GL_LIGHT3, GL_DIFFUSE, diffuseLight_bright);
-    glEnable(GL_LIGHT3);
-
+    glEnable(GL_LIGHT3);*/
+#ifdef WITH_SHADOWS
     glActiveTexture(GL_TEXTURE0);
+#endif
 
 	//		Render Normal		
 	entity = gGraphicalObjList.GetFirst();
@@ -616,7 +629,7 @@ int GameRender()
 		entity = entity->GetPrev();
 	}
 
-	glMatrixMode (GL_PROJECTION);
+/*	glMatrixMode (GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
 	glOrtho( 0.0, 1.0, (1.0/SCR_WIDTH*SCR_HEIGHT), 0.0, -1.0, 1.0 );
@@ -636,14 +649,11 @@ int GameRender()
 	glMatrixMode (GL_PROJECTION);
 	glPopMatrix();
 	glMatrixMode (GL_MODELVIEW);
-
-    ProfileStopClock(P_RENDER);
-    ProfileStartClock(P_VSYNC);
+*/
 
 	glFinish();
 	SDL_GL_SwapBuffers( );	
 
-    ProfileStopClock(P_VSYNC);
 	return 1;
 }
 

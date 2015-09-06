@@ -4,6 +4,8 @@
 #include "../common/log.h"
 #include "../engine.h"
 
+#include <iostream>
+
 CLinkedList<IInputtingObj>	gInputtingEntityQueue;
 CInputState*			gInputState;
 CBlankInputState		gBlankInputState;
@@ -21,7 +23,7 @@ void ReleaseButton( char j );
 //void JoyInput( SDL_Event* e );
 
 void InputEvent( SDL_Event* e )
-{
+{ //std::cout << "Input." << std::endl;
 	switch ( e->type )
 	{
 		case SDL_MOUSEMOTION:
@@ -33,7 +35,7 @@ void InputEvent( SDL_Event* e )
 			MousePress( e->button );
 			break;
 
-		case SDL_JOYBUTTONDOWN:
+/*		case SDL_JOYBUTTONDOWN:
 			PressButton( (char)e->jbutton.button );
 			break;
 		case SDL_JOYBUTTONUP:
@@ -45,7 +47,7 @@ void InputEvent( SDL_Event* e )
 			else if (e->jaxis.axis == 1)
 				gInputState->yaxis = -e->jaxis.value / 32767.0f;
 //			JoyInput( e );
-			break;
+			break;*/
 
 		case SDL_KEYDOWN:
 			PressKey( e->key.keysym.sym );
@@ -89,10 +91,12 @@ void MouseMovement( SDL_MouseMotionEvent m )
 
 void PressKey( SDLKey k )
 {
+	//std::cout << "Press key k: " << k << std::endl;
 	for (int i = 0; i < MAX_MAPPINGS; i++)
 	{
 		if (gInputState->mappedKeys[i].keyType == KB_KEY && gInputState->mappedKeys[i].kbkey == k)
 		{
+//			std::cout << "Press key.";
 			if (gInputState->mappedKeys[i].keyNumber == K_QUIT)
 			{
 				gRunning = false;
@@ -146,6 +150,7 @@ void ReleaseButton( char j )
 
 void BindEntityToInput( IInputtingObj* entity )
 {
+	std::cout << "Bind input." << std::endl;
 	CListEntry<IInputtingObj>* otherObjects = gInputtingEntityQueue.GetFirst();
 	while ( otherObjects )
 	{
@@ -159,6 +164,7 @@ void BindEntityToInput( IInputtingObj* entity )
 
 void UnbindEntityToInput( IInputtingObj* entity )
 {
+	std::cout << "Unbind input." << std::endl;
 	CListEntry<IInputtingObj>* objects = gInputtingEntityQueue.GetFirst();
 	while ( objects )
 	{

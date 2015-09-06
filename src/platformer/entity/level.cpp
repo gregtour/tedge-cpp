@@ -60,8 +60,8 @@ IPhysicalObj* CLevel::LoadMS3D(const char* file, CPhysics* world)
 			obj->SetBoundingBox( b );
 			obj->SetObjectType(PLAYER_OBJ_TYPE);
 			obj->SetCollisionMask( 1 );
-			obj->SetDefaultForce( SVector3( 0.0f, -145.0f, 0.0f ) );
-			obj->SetFriction( 10.0f );
+			obj->SetDefaultForce( SVector3( 0.0f, -105.0f, 0.0f ) );
+			obj->SetFriction( 8.0f );
 
 			player->SetRot( HALF_PI );
 			gEntities.Add(player);

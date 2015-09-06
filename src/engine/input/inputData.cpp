@@ -1,5 +1,5 @@
+#include <iostream>
 #include "inputData.h"
-
 
 CMousePosition::CMousePosition()
 {
@@ -42,6 +42,10 @@ CInputState::CInputState()
 	yaxis = 0.0f;
 	for (int i = 0; i < MAX_KEYS; i++)
 		pressedKeys[i] = NON_KEY;
+	for (int i = 0; i < MAX_MAPPINGS; i++)
+	{
+		mappedKeys[i].keyType == NON_KEY;
+	}
 }
 
 
@@ -66,17 +70,21 @@ bool CInputState::IsKeyHit( int keyNumber )
 
 void CInputState::Update()
 {
+	//std::cout << "cinputupdate ";
 	for (int i = 0; i < MAX_KEYS; i++)
 		pressedKeysLast[i] = pressedKeys[i];
 }
 
 void CInputState::MapKey(CMapping m)
 {
+//	std::cout << "Mapping key " << m.kbkey << std::endl;
 	for (int i = 0; i < MAX_MAPPINGS; i++)
 	{
+//		std::cout << "mappedkey[" << i << "] mapped to " << mappedKeys[i].kbkey << " key type " << mappedKeys[i].keyType << std::endl;
 		if (mappedKeys[i].keyType == NON_KEY)
 		{
 			mappedKeys[i] = m;
+//			std::cout << "Mapping key " << m.kbkey << std::endl;
 			return;
 		}
 	}
@@ -86,7 +94,7 @@ void CInputState::PressKey(int k)
 {
 	for (int i = 0; i < MAX_KEYS; i++)
 		if (pressedKeys[i] == NON_KEY)
-		{
+		{	//std::cout << "key i: " << i << std::endl;
 			pressedKeys[i] = k;
 			return;
 		}

@@ -26,7 +26,7 @@
 	#include <sstream>
 #endif
 
-#define NUM_THREADS     2
+//#define NUM_THREADS     2
 
 class I3DVERTBUF;
 class IPhysicalObj;
@@ -74,9 +74,9 @@ public:
 	/*	Object Lists		*/
 	CLinkedList<CPObject>		mObjects;
 	CLinkedList<CPTriangle>		mStaticObjects;
-	std::set<CPTriangle*>**		mSortedObjects;
-    std::set<CPObject*>**     mSortedDynamicObjects;
-    CLinkedList<CPSpring>       mSprings;
+//	std::set<CPTriangle*>**		mSortedObjects;
+//    std::set<CPObject*>**     mSortedDynamicObjects;
+//    CLinkedList<CPSpring>       mSprings;
 
 	/*	Sort Optimization	*/
 	bool mIsSorted;

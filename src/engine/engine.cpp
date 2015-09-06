@@ -11,6 +11,7 @@
 #include <math.h>
 #include <string.h>
 #include <stdlib.h>
+#include <iostream>
 
 #ifdef WIN32
 	#include <windows.h>
@@ -27,7 +28,7 @@
 #include "common/timer.h"
 #include "common/resource.h"
 #include "common/log.h"
-#include "common/profile.h"
+//#include "common/profile.h"
 
 /*	Game Includes		*/
 #include "entity/entity.h"
@@ -37,7 +38,7 @@
 #include "update.h"
 #include "graphics/graphics.h"
 #include "input/input.h"
-#include "sound/sound.h"
+//#include "sound/sound.h"
 #include "physics/physics.h"
 #ifdef _NETWORKING
 #include "network/network.h"
@@ -61,27 +62,28 @@ int gState;
 
 int Startup() 
 {
+	std::cout << "Startup..." << std::endl;
 	gState = DEFAULT_STATE;
 	gRunning = true;
 	gActive = true;
 	gPaused = false;
 
 #ifdef _DEBUG
-	if ( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER  | SDL_INIT_NOPARACHUTE | SDL_INIT_JOYSTICK ) != 0 )
+	if ( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER  | SDL_INIT_NOPARACHUTE /*| SDL_INIT_JOYSTICK */) != 0 )
 		return 0;	
 #else
-	if ( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER | SDL_INIT_JOYSTICK ) != 0)
+	if ( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER /*| SDL_INIT_JOYSTICK */) != 0)
 		return 0;
 #endif
 
-	SDL_JoystickOpen(0);
-	SDL_JoystickEventState(SDL_ENABLE);
+//	SDL_JoystickOpen(0);
+//	SDL_JoystickEventState(SDL_ENABLE);
 
 	gLog.ResetTimeStamp();
-    ProfileInit();
+//    ProfileInit();
 
 	if (
-		SoundStartup() &&
+//		SoundStartup() &&
 		GraphicsStartup() &&
 #ifdef _NETWORKING
 		NetworkStartup() &&
@@ -97,15 +99,14 @@ int Startup()
 
 void Shutdown() 
 { 
+	std::cout << "Shutdown..." << std::endl << std::endl << std::endl;
 	GameUnload();
-	SoundShutdown();
+//	SoundShutdown();
 	GraphicsShutdown();
 #ifdef _NETWORKING
 	NetworkShutdown();
 #endif
 	SDL_Quit();
-
-    ProfileResults();
 
 	gResourceManager.UnloadAll();
 }
@@ -143,9 +144,9 @@ void SdlEvents()
 		case SDL_MOUSEMOTION:
 		case SDL_MOUSEBUTTONDOWN:
 		case SDL_MOUSEBUTTONUP:
-		case SDL_JOYAXISMOTION:
-		case SDL_JOYBUTTONDOWN:
-		case SDL_JOYBUTTONUP:
+//		case SDL_JOYAXISMOTION:
+//		case SDL_JOYBUTTONDOWN:
+//		case SDL_JOYBUTTONUP:
 		case SDL_KEYDOWN:
 		case SDL_KEYUP:
 			InputEvent( &event );
@@ -159,8 +160,6 @@ void SdlEvents()
 }
 
 
-
-extern int frame_count;
 void Game()
 {
 	gLog.LogItem( new CLogMessage("Starting Up") );
@@ -188,16 +187,20 @@ void Game()
     float total_time = 0.0f;
     int total_frames = 0;
 
+	std::cout << "Main loop..." << std::endl;
 	gLog.LogItem( new CLogMessage("Entering Main Loop") );
 	while ( gRunning ) 
 	{
+//		std::cout << "Frame." << std::endl;
 		if ( oldState != gState )
 			GameStateChange( oldState, gState );
 		oldState = gState;
 
+//		std::cout << "Input." << std::endl;
 		gInputState->Update();
 		SdlEvents();
 
+//		std::cout << "Ticks." << std::endl;
 		lastTicks = ticks;
 		ticks = SDL_GetTicks();
 
@@ -222,16 +225,18 @@ void Game()
 		{
 			if ( !gPaused )
 			{
-				gWorld->Update( timer.DT() );
+//				std::cout << "Update." << std::endl;
+				GameUpdate( timer.DT() / 1.5f );				
+
+//				std::cout << "Update Physics." << std::endl;
+				gWorld->Update( timer.DT() / 1.5f );
+//				std::cout << "Collision." << std::endl;
 				HandleCollisions();
-				GameUpdate( timer.DT() );				
 			} else {
 				GameUpdate(0.0f);
 			}
-
-            ProfileIncrementFrame();
-            if (frame_count % 2 == 0)
-    			GameRender();
+//		std::cout << "Render." << std::endl;
+    		GameRender();
 		}
 
 	}

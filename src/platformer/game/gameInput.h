@@ -10,7 +10,7 @@
 
 enum GAMEKEY
 {
-	K_UP,
+	K_UP = 1,
 	K_DOWN,
 	K_LEFT,
 	K_RIGHT,

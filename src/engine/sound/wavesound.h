@@ -20,7 +20,9 @@ public:
 	
 private:
 	bool mLoaded;
+#ifndef NO_SOUND
 	Mix_Chunk* mWave;
+#endif
 };
 
 class CManagedWaveSound: public CManagedResource

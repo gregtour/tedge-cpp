@@ -10,10 +10,12 @@
 #include <set>
 #include <stdio.h>
 #include <assert.h>
+#include <iostream>
 
 #include "physics.h"
 #include "../graphics/buffer/I3dVertBuf.h"
-#include "../common/profile.h"
+//#include "../common/profile.h"
+
 
 #ifdef THREADED_PHYSICS
 // threading
@@ -47,10 +49,11 @@ CPhysics::CPhysics()
 {
 	mBounds = false;
 	SetCollisionFunction( NULL );
-	mSortedObjects = NULL;
+//	mSortedObjects = NULL;
 	mIsSorted = false;
 	mBounds = false;
-    mSortedDynamicObjects = NULL;
+//    mSortedDynamicObjects = NULL;
+	std::cout << "Making Physics." << std::endl;
 #ifdef PHYSICS_LOGGING	
 	gLog.LogItem( new CLogMessage( "New Physics Simulation Created" ) );
 #endif
@@ -66,8 +69,8 @@ CPhysics::~CPhysics( )
 		gLog.LogItem( new CLogMessage( stream.str() ) );
 #endif
 
-		if ( mIsSorted )
-			delete[] mSortedObjects;
+//		if ( mIsSorted )
+//			delete[] mSortedObjects;
 
 		CListEntry<CPObject>* object = mObjects.GetFirst();
 		while ( object )
@@ -116,23 +119,26 @@ bool CPhysics::IsObjectInSimulation( CPTriangle* o )
 
 void CPhysics::Update( float dt )
 {
-    ProfileStartClock(P_PHYSICS);
+//    std::cout << "Update Physics." << std::endl;
+    //ProfileStartClock(P_PHYSICS);
 
-    ClearDynamicSortedObjects();
+//	std::cout << "Clear objects." << std::endl;
+//    ClearDynamicSortedObjects();
 
-    CPObject** objects;
+//    CPObject** objects;
     CListEntry<CPObject>* e;
     int i;
 
-    objects = new CPObject*[mObjects.length];
-    e = mObjects.GetFirst();
-    for (i = 0; e && i < mObjects.length; i++) 
-    {
-        objects[i] = e->data;
-        e = e->GetNext();
-    }
+//	std::cout << "Update Objects." << std::endl;
+//    objects = new CPObject*[mObjects.length];
+//    e = mObjects.GetFirst();
+//    for (i = 0; e && i < mObjects.length; i++) 
+//    {
+//        objects[i] = e->data;
+//        e = e->GetNext();
+//    }
 
-    ProfileStopClock(P_PHYSICS);
+    //ProfileStopClock(P_PHYSICS);
 
 #ifdef THREADED_PHYSICS
     ProfileStartClock(P_KINEMATICS);
@@ -144,18 +150,21 @@ void CPhysics::Update( float dt )
 	SyncCollisionsThreaded(objects, mObjects.length);
     ProfileStopClock(P_COLLISION);
 #else
-    ProfileStartClock(P_KINEMATICS);
+//std::cout << "Update Kinematics." << std::endl;
+    //ProfileStartClock(P_KINEMATICS);
     SyncObjects(dt);
-    ProfileStopClock(P_KINEMATICS);
+    //ProfileStopClock(P_KINEMATICS);
 
-    ProfileStartClock(P_COLLISION);
+//std::cout << "Update Collision." << std::endl;
+    //ProfileStartClock(P_COLLISION);
     SyncCollisions();
-    ProfileStopClock(P_COLLISION);
+    //ProfileStopClock(P_COLLISION);
 #endif
 
-    ProfileStartClock(P_PHYSICS);
-
+    //ProfileStartClock(P_PHYSICS);
+//	std::cout << "Springs What." << std::endl;
     // spring dampening
+/*
     {
         CListEntry<CPSpring>* e = mSprings.GetFirst();
         while (e)
@@ -190,7 +199,9 @@ void CPhysics::Update( float dt )
             e = e->GetNext();
         }
     }
+*/
 
+//	std::cout << "Reset Force." << std::endl;
     // reset forces
 	e = mObjects.GetFirst();
 	while ( e )
@@ -199,13 +210,14 @@ void CPhysics::Update( float dt )
 		e = e->GetNext();
 	}
 
-    delete[] objects;
+//	std::cout << "Delete Objects???." << std::endl;
+    //delete[] objects;
 
-    ProfileStopClock(P_PHYSICS);
+    //ProfileStopClock(P_PHYSICS);
 }
 
 void CPhysics::ClearDynamicSortedObjects() {
-    if (mSortedDynamicObjects) {
+/*    if (mSortedDynamicObjects) {
         for (int i = 0; i < mSortX * mSortZ; i++)
             if (mSortedDynamicObjects[i]) {
                 delete mSortedDynamicObjects[i];
@@ -221,7 +233,7 @@ void CPhysics::ClearDynamicSortedObjects() {
             mSortedObjects[i] = NULL;
     }
 
-	/*	Fill with Sorted Objects	*/
+	//	Fill with Sorted Objects	
 	CListEntry<CPObject>* e = mObjects.GetFirst();
 	while ( e )
 	{
@@ -243,26 +255,27 @@ void CPhysics::ClearDynamicSortedObjects() {
 				}
 			
 		e = e->GetNext();
-	}
+	}*/
 }
 
 
 void CPhysics::SortStaticObjects( int resolutionX, int resolutionY, int resolutionZ )
 {
-	if ( !mIsSorted && mBounds )
+	std::cout << "Sorting: " << resolutionX << ", " << resolutionY << ", " << resolutionZ << std::endl;
+/*	if ( !mIsSorted && mBounds )
 	{
-		/*	Copy Information	*/
+		//	Copy Information	
 		mIsSorted = true;
 		mSortX = resolutionX;
 		mSortY = resolutionY;
 		mSortZ = resolutionZ;
 
-		/*	Create std::set Array	*/
+		//	Create std::set Array	
 		mSortedObjects = new std::set<CPTriangle*>*[ mSortX * mSortY * mSortZ ];
 		for ( int i = 0; i < (mSortX*mSortY*mSortZ); i++ )
 			mSortedObjects[i] =	NULL;	//new std::set<CPObject*>();
 
-		/*	Fill with Sorted Objects	*/
+		//	Fill with Sorted Objects	
 		CListEntry<CPTriangle>* e = mStaticObjects.GetFirst();
 		while ( e )
 		{
@@ -289,7 +302,7 @@ void CPhysics::SortStaticObjects( int resolutionX, int resolutionY, int resoluti
 			e = e->GetNext();
 		}
 
-	}
+	}*/
 }
 
 
@@ -303,7 +316,7 @@ void CPhysics::Add( CPObject* obj )
 void CPhysics::Add( CPTriangle* obj )
 {
 	mStaticObjects.Add( obj );
-
+#if 0
 	if ( mIsSorted )
 	{
 		SBoundingBox aabb = obj->GetBoundingBox();
@@ -317,7 +330,7 @@ void CPhysics::Add( CPTriangle* obj )
 		int endY = MAX( MIN( (int)(end.y * mSortY), mSortY-1 ), 0 );
 		int endZ = MAX( MIN( (int)(end.z * mSortZ), mSortZ-1 ), 0 );
 
-		for ( int z = beginZ; z <= endZ; z++ )
+/*		for ( int z = beginZ; z <= endZ; z++ )
 			for ( int y = beginY; y <= endY; y++ )
 				for ( int x = beginX; x <= endX; x++ )
 				{
@@ -325,14 +338,16 @@ void CPhysics::Add( CPTriangle* obj )
 						mSortedObjects[ x + y*mSortX + z*mSortX*mSortY ] = new std::set<CPTriangle*>();
 					mSortedObjects[ x + y*mSortX + z*mSortX*mSortY ]->insert( obj );		
 				}
+*/
 	}
+#endif
 }
 
 void CPhysics::Add( I3DVERTBUF* verts, int type, int mask)
 {
 	assert(verts != NULL);
 
-    SVector3 temp;
+	SVector3 temp;
 
 	verts->Lock();
 	for (int i = 0; i < verts->mNum; i+=3)
@@ -340,7 +355,7 @@ void CPhysics::Add( I3DVERTBUF* verts, int type, int mask)
 		CPTriangle* mTri = new CPTriangle(true);
 		for (int j = 0; j < 3; j++)
 		{
-            verts->GetPos(temp.x, temp.y, temp.z);
+	                verts->GetPos(temp.x, temp.y, temp.z);
 			mTri->SetPoint(temp, j);
 			verts->NextVert();
 		}
@@ -353,16 +368,16 @@ void CPhysics::Add( I3DVERTBUF* verts, int type, int mask)
 
 void CPhysics::Add( CPSpring* spring )
 {
-    mSprings.Add(spring);
+//    mSprings.Add(spring);
 }
 
 void CPhysics::Remove( CPSpring* spring )
-{
+{/*
     CListEntry<CPSpring>* e;
     e = mSprings.FindEntry(spring);
     if (e) {
         mSprings.RemoveEntry(e);
-    }
+    }*/
 }
 
 
@@ -394,7 +409,7 @@ void CPhysics::Remove( CPTriangle* obj )
 	if ( e )
 	{
 		mStaticObjects.RemoveEntry( e );
-
+#if 0
 		if ( mIsSorted )
 		{
 			SBoundingBox aabb = obj->GetBoundingBox();
@@ -408,15 +423,17 @@ void CPhysics::Remove( CPTriangle* obj )
 			int endY = MAX( MIN( (int)(end.y * mSortY), mSortY-1 ), 0 );
 			int endZ = MAX( MIN( (int)(end.z * mSortZ), mSortZ-1 ), 0 );
 
-			for ( int z = beginZ; z <= endZ; z++ )
+/*			for ( int z = beginZ; z <= endZ; z++ )
 				for ( int y = beginY; y <= endY; y++ )
 					for ( int x = beginX; x <= endX; x++ )
 					{
 						if ( mSortedObjects[ x + y*mSortX + z*mSortX*mSortY ] != NULL )
 							mSortedObjects[ x + y*mSortX + z*mSortX*mSortY ]->erase( obj );
 					}
+*/
 				
 		}
+#endif
 	} else {
 		// Object not found in Object List
 #ifdef PHYSICS_LOGGING
@@ -434,6 +451,7 @@ void CPhysics::SetCollisionFunction( void (*collisionFunction)(CCollision c) )
 
 void CPhysics::SetBoundries( SBoundingBox boundries )
 {
+	std::cout << "Set bounds." << std::endl;
 	mBounds = true;
 	mBoundries = boundries;
 }
@@ -821,8 +839,8 @@ void CPhysics::SyncCollisions()
 		if (object1->data->mShape == CP_SIMPLE)
 		{
 
-			/*	Static Objects	*/
-			if ( !mIsSorted )
+			//	Static Objects	
+//			if ( !mIsSorted )
 			{
 				staticObject = mStaticObjects.GetFirst();
 				while ( staticObject )
@@ -830,50 +848,51 @@ void CPhysics::SyncCollisions()
 					Collision( object1->data, staticObject->data );
 					staticObject = staticObject->GetNext();
 				}
-			}	/*	Sorted Static Objects	*/
-			else
+			}	//	Sorted Static Objects	
+/*			else
 			{
-				/*	Construct Set	*/
-				std::set<CPTriangle*> collisions;
-
-				SBoundingBox aabb = object1->data->GetBoundingPath();
-
-				SVector3 begin = (aabb.min - mBoundries.min)/(mBoundries.max - mBoundries.min);
-				SVector3 end = (aabb.max - mBoundries.min)/(mBoundries.max - mBoundries.min);
-
-				int beginX = MAX( MIN( (int)(begin.x * mSortX), mSortX-1 ), 0 );
-				int beginY = MAX( MIN( (int)(begin.y * mSortY), mSortY-1 ), 0 );
-				int beginZ = MAX( MIN( (int)(begin.z * mSortZ), mSortZ-1 ), 0 );
-				int endX = MAX( MIN( (int)(end.x * mSortX), mSortX-1 ), 0 );
-				int endY = MAX( MIN( (int)(end.y * mSortY), mSortY-1 ), 0 );
-				int endZ = MAX( MIN( (int)(end.z * mSortZ), mSortZ-1 ), 0 );
-
-				for ( int z = beginZ; z <= endZ; z++ )
-					for ( int y = beginY; y <= endY; y++ )
-						for ( int x = beginX; x <= endX; x++ )
-						{
-							if ( mSortedObjects[ x + y*mSortX + z*mSortX*mSortY ] != NULL )
-								collisions.insert( mSortedObjects[ x + y*mSortX + z*mSortX*mSortY ]->begin(),
-									mSortedObjects[ x + y*mSortX + z*mSortX*mSortY ]->end() );
-						}
-
-
-				/*	Iterate through Set	*/
-				std::set<CPTriangle*>::iterator it;
-				for ( it = collisions.begin(); it != collisions.end(); it++ )
-					Collision( object1->data, (*it) );
+					//	Construct Set	
+					std::set<CPTriangle*> collisions;
+	
+					SBoundingBox aabb = object1->data->GetBoundingPath();
+	
+					SVector3 begin = (aabb.min - mBoundries.min)/(mBoundries.max - mBoundries.min);
+					SVector3 end = (aabb.max - mBoundries.min)/(mBoundries.max - mBoundries.min);
+	
+					int beginX = MAX( MIN( (int)(begin.x * mSortX), mSortX-1 ), 0 );
+					int beginY = MAX( MIN( (int)(begin.y * mSortY), mSortY-1 ), 0 );
+					int beginZ = MAX( MIN( (int)(begin.z * mSortZ), mSortZ-1 ), 0 );
+					int endX = MAX( MIN( (int)(end.x * mSortX), mSortX-1 ), 0 );
+					int endY = MAX( MIN( (int)(end.y * mSortY), mSortY-1 ), 0 );
+					int endZ = MAX( MIN( (int)(end.z * mSortZ), mSortZ-1 ), 0 );
+	
+					for ( int z = beginZ; z <= endZ; z++ )
+						for ( int y = beginY; y <= endY; y++ )
+							for ( int x = beginX; x <= endX; x++ )
+							{
+								if ( mSortedObjects[ x + y*mSortX + z*mSortX*mSortY ] != NULL )
+									collisions.insert( mSortedObjects[ x + y*mSortX + z*mSortX*mSortY ]->begin(),
+										mSortedObjects[ x + y*mSortX + z*mSortX*mSortY ]->end() );
+							}
+	
+	
+					//	Iterate through Set	
+					std::set<CPTriangle*>::iterator it;
+					for ( it = collisions.begin(); it != collisions.end(); it++ )
+						Collision( object1->data, (*it) );
 			}
-
-			/*	Dynamic Objects		*/
-            /*
+*/
+	
+			//	Dynamic Objects		
+	            
 			object2 = object1->GetNext();
 			while ( object2 )
 			{
 				Collision( object1->data, object2->data );
 				object2 = object2->GetNext();
-			}*/
+			}
 
-            // dynamic objects, sorted
+/*            // dynamic objects, sorted
             //	Construct Set
 			std::set<CPObject*> dcollisions;
 			SBoundingBox aabb = object1->data->GetBoundingPath();
@@ -900,12 +919,12 @@ void CPhysics::SyncCollisions()
 			//	Iterate through Set
 			std::set<CPObject*>::iterator it;
 			for ( it = dcollisions.begin(); it != dcollisions.end(); it++ ) {
-                if (object1->data != (*it))
+	        	        if (object1->data != (*it))
 					world->Collision( object1->data, (*it) );
-            }
-
+		            }
+*/
 		} else {
-			/*	Dynamic Objects		*/
+			//	Dynamic Objects		/
 			object2 = object1->GetNext();
 			while ( object2 )
 			{
